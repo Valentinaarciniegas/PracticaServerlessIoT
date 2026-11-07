@@ -1,0 +1,29 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "iot:Connect",
+      "Resource": "arn:aws:iot:REGION:ACCOUNT_ID:client/esp32-secadero-01"
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["iot:Publish", "iot:RetainPublish"],
+      "Resource": [
+        "arn:aws:iot:REGION:ACCOUNT_ID:topic/secadero1/lecturas",
+        "arn:aws:iot:REGION:ACCOUNT_ID:topic/secadero1/estado",
+        "arn:aws:iot:REGION:ACCOUNT_ID:topic/secadero1/led/estado"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": "iot:Subscribe",
+      "Resource": "arn:aws:iot:REGION:ACCOUNT_ID:topicfilter/secadero1/led/cmd"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "iot:Receive",
+      "Resource": "arn:aws:iot:REGION:ACCOUNT_ID:topic/secadero1/led/cmd"
+    }
+  ]
+}

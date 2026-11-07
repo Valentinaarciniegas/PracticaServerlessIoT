@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CocaTrace · Secadero</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 3C8 10 6 18 16 29C26 18 24 10 16 3Z' fill='%232f7d4f'/><path d='M16 8V27' stroke='white' stroke-width='1.6'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="barra">
+    <div class="marca">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3C8 10 6 18 16 29C26 18 24 10 16 3Z"/><path class="nervio" d="M16 8V27M16 14l-4-3M16 19l5-4M16 23l-4-2"/></svg>
+      <div>
+        <h1>CocaTrace</h1>
+        <p id="subtitulo">Secado de hoja de coca</p>
+      </div>
+    </div>
+    <div class="estado-conexion">
+      <span id="dispositivo" class="pildora gris"><i></i><span>ESP32: consultando…</span></span>
+      <span id="actualizado" class="tenue"></span>
+    </div>
+  </header>
+
+  <main>
+    <section class="tarjetas">
+      <article class="tarjeta" id="t-temp">
+        <h2>Temperatura</h2>
+        <p class="valor"><span id="temp">--</span><small>°C</small></p>
+        <p class="nota" id="temp-nota">Límite <span class="lim-t"></span> °C</p>
+      </article>
+      <article class="tarjeta" id="t-hum">
+        <h2>Humedad relativa</h2>
+        <p class="valor"><span id="hum">--</span><small>%</small></p>
+        <p class="nota" id="hum-nota">Límite <span class="lim-h"></span> %</p>
+      </article>
+      <article class="tarjeta">
+        <h2>Última lectura</h2>
+        <p class="valor pequeno" id="hace">--</p>
+        <p class="nota" id="hora-ultima">&nbsp;</p>
+      </article>
+      <article class="tarjeta">
+        <h2>Lecturas en el período</h2>
+        <p class="valor pequeno" id="total">--</p>
+        <p class="nota">Guardadas en DynamoDB</p>
+      </article>
+    </section>
+
+    <section class="controles">
+      <div class="rango" role="group" aria-label="Período">
+        <button data-horas="1">1 h</button>
+        <button data-horas="6">6 h</button>
+        <button data-horas="24" class="activo">24 h</button>
+        <button data-horas="168">7 días</button>
+      </div>
+      <a id="descargar" class="boton" href="#" download>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 19h16"/></svg>
+        Descargar CSV
+      </a>
+    </section>
+
+    <section class="rejilla">
+      <article class="panel grafica">
+        <h2>Temperatura (°C)</h2>
+        <div class="lienzo"><canvas id="g-temp"></canvas></div>
+      </article>
+      <article class="panel grafica">
+        <h2>Humedad relativa (%)</h2>
+        <div class="lienzo"><canvas id="g-hum"></canvas></div>
+      </article>
+
+      <article class="panel actuador">
+        <h2>Ventilador del secadero</h2>
+        <p class="tenue">Representado por el LED del ESP32 (GPIO2). La orden viaja por MQTT a AWS IoT.</p>
+        <div class="foco" id="foco" aria-hidden="true"><div class="luz"></div></div>
+        <p class="estado-led" id="estado-led">Estado: consultando…</p>
+        <div class="botones-led">
+          <button id="led-on" class="boton primario">Encender</button>
+          <button id="led-off" class="boton">Apagar</button>
+        </div>
+        <label class="clave">
+          Clave de control
+          <input id="clave" type="password" autocomplete="off" placeholder="Solo para el equipo">
+        </label>
+        <p class="mensaje" id="mensaje-led" role="status"></p>
+      </article>
+
+      <article class="panel tabla">
+        <h2>Últimas lecturas</h2>
+        <div class="desplazable">
+          <table>
+            <thead><tr><th>Hora (Colombia)</th><th>Temp. (°C)</th><th>Humedad (%)</th></tr></thead>
+            <tbody id="filas"><tr><td colspan="3" class="tenue">Cargando…</td></tr></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    ESP32 + DHT22 → AWS IoT Core → DynamoDB · API Gateway + Lambda · Dashboard en Amazon S3
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

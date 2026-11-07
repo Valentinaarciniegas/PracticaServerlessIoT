@@ -1,0 +1,20 @@
+{
+  "sql": "SELECT topic(1) AS secadero, ts, temperatura, humedad, floor(timestamp() / 1000) AS recibido FROM '+/lecturas' WHERE ts > 1700000000 AND temperatura >= -40 AND temperatura <= 80 AND humedad >= 0 AND humedad <= 100",
+  "description": "Guarda cada lectura del ESP32 en DynamoDB (tabla cocatrace_lecturas)",
+  "awsIotSqlVersion": "2016-03-23",
+  "ruleDisabled": false,
+  "actions": [
+    {
+      "dynamoDBv2": {
+        "roleArn": "arn:aws:iam::ACCOUNT_ID:role/LabRole",
+        "putItem": { "tableName": "cocatrace_lecturas" }
+      }
+    }
+  ],
+  "errorAction": {
+    "cloudwatchLogs": {
+      "roleArn": "arn:aws:iam::ACCOUNT_ID:role/LabRole",
+      "logGroupName": "/cocatrace/iot-errores"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+# Claves del ESP32 (WiFi y certificados de AWS IoT)
+firmware/**/config.h
+# Certificados y llaves de AWS IoT
+certs/
+*.pem
+*.key
+*.crt
+# Archivos generados al desplegar
+*.zip
+.env
+*.csv
+# Python
+__pycache__/
